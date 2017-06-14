@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Events\LoginEvent;
 use App\Jobs\LoginRemind;
 
+use App\Jobs\RabbitMq;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
@@ -13,7 +14,7 @@ use Carbon\Carbon;
 class webController extends Controller
 {
 
-    public function index(){
+    public function index(){ //基本 测试
         $v = 'name'.date('i',time());
         $v1 = 'name1'.date('i',time());
         $job = 'job'.date('i',time());
@@ -37,7 +38,6 @@ class webController extends Controller
         dispatch(new LoginRemind($job));
         dispatch($job_name);
 
-
         $data = [
             'aNewMessage',
             'data'=>[
@@ -47,6 +47,17 @@ class webController extends Controller
 
         //Redis::publish('message',json_encode($data));
         echo $job;
+    }
+
+    public function index1(){
+        $arr=array(
+            'time'=>time()
+        );
+
+        $job = (new RabbitMq($arr))
+            ->delay(Carbon::now()->addMinutes(1));
+
+        dispatch(new RabbitMq($job));
     }
 
     public function webIndex()

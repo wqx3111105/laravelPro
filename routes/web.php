@@ -16,5 +16,7 @@ Route::get('/', function () {
 });
 
 Route::get('/login/index', 'webController@index');
+Route::get('/login/index1', 'webController@index1');
+
 Route::get('/login/webIndex', 'webController@webIndex');
 Route::get('/login/webIndex1', 'webController@webIndex1');
